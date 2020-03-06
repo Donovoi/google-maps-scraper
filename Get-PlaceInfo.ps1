@@ -2,9 +2,9 @@ function Get-PlaceInfo {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$True,
-        ValueFromPipeline=$True, ValueFromPipelinebyPropertyName=$true)]   $URL
-        # [Parameter(Mandatory=$false,
-		# ValueFromPipeline=$True, ValueFromPipelinebyPropertyName=$true)]   $Radius = 14
+        ValueFromPipeline=$True, ValueFromPipelinebyPropertyName=$true)]   $URL,
+        [Parameter(Mandatory=$false,
+		ValueFromPipeline=$True, ValueFromPipelinebyPropertyName=$true)]   $Radius = 1000
     )
     
     begin {
@@ -14,27 +14,36 @@ function Get-PlaceInfo {
         # $VerbosePreference = "continue";
         # $WarningPreference = "continue";
     
+Import-Module .\GooglePlacesScraper.psm1
+
+
         Write-Output "All Logging and information will be in C:\Logs\scrape-logs.log";
         #Create/Read Config file
         Read-Config | Out-Null;
-    
-        Write-Log -Message "Checking for required modules";
-        if ($PSVersionTable.PSVersion -lt '6.2') {
-          Install-PackageProvider -Name NuGet -Force | Out-Null;
-        }
-    
-        if (-not (Get-InstalledModule PoshGMaps -ErrorAction SilentlyContinue)) {
-          Write-Log -Message "Installing PoshGMaps";
-          Install-Module -Name PoshGMaps -Force -AllowClobber | Out-Null;
-          Import-Module -Name PoshGMaps;
-        };
 
-        Import-Module -Name PoshGMaps;
+      
 
     }
     
     process {
-        
+
+
+
+          #Format URL to usable format
+          Write-Log "Getting Search String From URL";
+          $SplitURL = ($URL -split "/")[5];
+          [regex]$RegexLookUp = '([a-zA-Z0-9])*'
+          $SearchString = $RegexLookUp.Matches($SplitURL);
+
+                  # Query Google Maps
+        Write-Log "Querying Google Maps now..."
+        $output = Invoke-RestMethod "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$SearchString&key=$($apiKey)" -Method "GET"
+
+
+
+    # Convert Data to appropriate fields
+    $output.results.place_id
+
     }
     
     end {
