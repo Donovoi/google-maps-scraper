@@ -13,22 +13,12 @@ function Write-Log
     [Alias('LogPath')]
     [string]$Path = 'C:\Logs\scrape-logs.log',
 
-    # [Parameter(Mandatory = $false)]
-    # [ValidateSet("Error","Warn","Info")]
-    # [string]$Level = "Info",
-
     [Parameter(Mandatory = $false)]
     [switch]$NoClobber
   )
 
   begin
   {
-    # Set VerbosePreference to Continue so that verbose messages are displayed.
-    # $ErrorActionPreference = "silentlycontinue";
-    # $DebugPreference = "silentlycontinue";
-    # $VerbosePreference = "silentlycontinue";
-    # $WarningPreference = "silentlycontinue";
-    # $ConfirmPreference = "None";
   }
   process
   {
@@ -51,23 +41,6 @@ function Write-Log
 
     # Format Date for our Log File
     $FormattedDate = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-
-    # Write message to error, warning, or verbose pipeline and specify $LevelText
-    # switch ($Level) {
-    #   'Error' {
-    #     Write-Error $Message
-    #     $LevelText = 'ERROR:'
-    #   }
-    #   'Warn' {
-    #     Write-Warning $Message
-    #     $LevelText = 'WARNING:'
-    #   }
-    #   'Info' {
-    #     Write-Verbose $Message
-    #     $LevelText = 'INFO:'
-    #   }
-    # }
-    # Write log entry to $Path
     "$FormattedDate $LevelText $Message" | Out-File -FilePath $Path -Append
   }
   end

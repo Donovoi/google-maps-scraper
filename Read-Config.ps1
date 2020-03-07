@@ -30,7 +30,7 @@ function Read-Config {
   }
   catch {
     Write-Log -Message "Creating Configuration"
-    $apiKeyInput = Read-Host "Please enter your Google Places API key"; 
+    $apiKeyInput = Read-Host "Please enter your Google Places API key";
     $jsonString = @"
   {   
 "apiKey": "$apiKeyInput"
