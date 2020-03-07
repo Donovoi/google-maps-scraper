@@ -4,7 +4,7 @@ function Write-Log
   param
   (
     [Parameter(Mandatory = $true,
-      ValueFromPipelineByPropertyName = $true)]
+      ValueFromPipelinebyPropertyName = $true)]
     [ValidateNotNullOrEmpty()]
     [Alias("LogContent")]
     [string]$Message,
